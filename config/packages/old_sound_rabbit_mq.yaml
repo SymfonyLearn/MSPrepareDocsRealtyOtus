@@ -1,0 +1,30 @@
+old_sound_rabbit_mq:
+  connections:
+    default:
+      host:     '%env(RABBITMQ_HOST)%'
+      port:     '%env(RABBITMQ_PORT)%'
+      user:     '%env(RABBITMQ_USER)%'
+      password: '%env(RABBITMQ_PASSWORD)%'
+      vhost:    '/'
+      lazy:     false
+      connection_timeout: 3
+      read_write_timeout: 3
+
+  producers:
+    create_ad:
+      connection: default
+      exchange_options: { name: 'old_sound_rabbit_mq.create_ad', type: direct }
+      queue_options: { name: 'old_sound_rabbit_mq.consumer.create_ad' }
+
+  consumers:
+    create_ad:
+      connection: default
+      exchange_options: { name: 'old_sound_rabbit_mq.create_ad', type: direct }
+      queue_options: { name: 'old_sound_rabbit_mq.consumer.create_ad' }
+      callback: App\Consumer\CreateAdConsumer\Consumer
+      idle_timeout: 300
+      idle_timeout_exit_code: 0
+      graceful_max_execution:
+        timeout: 1800
+        exit_code: 0
+      qos_options: { prefetch_size: 0, prefetch_count: 1, global: false }

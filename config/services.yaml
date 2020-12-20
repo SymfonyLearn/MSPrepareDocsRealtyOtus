@@ -1,0 +1,56 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Model/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+        exclude:
+            - '../src/Controller/CreateAd/v1/Input/'
+            - '../src/Controller/CreateAd/v1/Output/'
+            - '../src/Controller/CreateAd/v1/Event/'
+            - '../src/Controller/CreateDeal/v1/Input/'
+            - '../src/Controller/CreateDeal/v1/Output/'
+            - '../src/Controller/CreateDealEvent/v1/Input/'
+            - '../src/Controller/CreateDealEvent/v1/Event/'
+            - '../src/Controller/CreateUser/v1/Input/'
+            - '../src/Controller/CreateUser/v1/Output/'
+            - '../src/Controller/LoadAd/v1/Output/'
+            - '../src/Controller/SearchAds/v1/Input/'
+            - '../src/Controller/SearchAds/v1/Output/'
+            - '../src/Controller/UpdateAd/v1/Input/'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    App\Service\AsyncService:
+        calls:
+            - ['registerProducer', [!php/const App\Service\AsyncService::CREATE_AD, '@old_sound_rabbit_mq.create_ad_producer']]
+
+    # решение проблемы postgres с добавлением в миграцию "CREATE SCHEMA public"
+    App\Symfony\MigrationEventSubscriber:
+        class: App\Symfony\MigrationEventSubscriber
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }

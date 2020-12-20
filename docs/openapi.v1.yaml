@@ -1,0 +1,616 @@
+openapi: 3.0.0
+info:
+  title: symfony
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /api/v1/ad:
+    post:
+      summary: Объявления
+      tags: [ ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                required:
+                  - id
+              examples:
+                Пример 1:
+                  value:
+                    id: 1
+      operationId: post-api-v1-ad
+      description: Создание объявления
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                category:
+                  type: string
+                  minLength: 1
+                  enum:
+                    - Квартира
+                    - Дом
+                    - Участок
+                address:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                rooms:
+                  type: number
+                area:
+                  type: number
+                floor:
+                  type: number
+              required:
+                - category
+                - address
+                - description
+                - price
+                - area
+            examples:
+              Пример 1:
+                value:
+                  category: Квартира
+                  address: 'Зеленоград, к. 130, кв. 14'
+                  description: Очень просторная двушка
+                  price: 9500000
+                  rooms: 2
+                  area: 54
+                  floor: 3
+    get:
+      summary: Объявления
+      operationId: get-api-v1-ad
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: ''
+                uniqueItems: true
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    created:
+                      type: string
+                      minLength: 1
+                    category:
+                      type: string
+                      minLength: 1
+                    address:
+                      type: string
+                      minLength: 1
+                    description:
+                      type: string
+                      minLength: 1
+                    price:
+                      type: integer
+                    rooms:
+                      type: integer
+                    area:
+                      type: number
+                    floor:
+                      type: integer
+                    seller_user:
+                      type: integer
+                  required:
+                    - id
+                    - created
+                    - category
+                    - address
+                    - price
+                    - area
+                    - seller_user
+              examples:
+                Пример 1:
+                  value:
+                    - id: 1
+                      created: '2019-08-24T14:15:22Z'
+                      category: Квартира
+                      address: 'Зеленоград, к. 130, кв. 14'
+                      description: Очень просторная двушка
+                      price: 9500000
+                      rooms: 2
+                      area: 54
+                      floor: 3
+                      seller_user: 1
+                    - id: 2
+                      created: '2019-08-24T14:15:22Z'
+                      category: Квартира
+                      address: 'Зеленоград, к. 130, кв. 14'
+                      description: Очень просторная двушка
+                      price: 9500000
+                      rooms: 2
+                      area: 54
+                      floor: 3
+                      seller_user: 1
+      description: Список объявлений
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                category:
+                  type: string
+                  minLength: 1
+                price_from:
+                  type: integer
+                price_to:
+                  type: integer
+                rooms:
+                  type: integer
+              required:
+                - category
+                - price_from
+                - price_to
+                - rooms
+            examples:
+              Пример 1:
+                value:
+                  category: Квартира
+                  price_from: 9500000
+                  price_to: 12000000
+                  rooms: 2
+    parameters: [ ]
+  '/api/v1/ad/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Конкретное объявление
+      tags: [ ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  created:
+                    type: string
+                    minLength: 1
+                  category:
+                    type: string
+                    minLength: 1
+                  address:
+                    type: string
+                    minLength: 1
+                  description:
+                    type: string
+                    minLength: 1
+                  price:
+                    type: integer
+                  rooms:
+                    type: integer
+                  area:
+                    type: number
+                  floor:
+                    type: integer
+                  seller_user:
+                    type: integer
+                required:
+                  - id
+                  - created
+                  - category
+                  - address
+                  - price
+                  - area
+                  - seller_user
+              examples:
+                Пример 1:
+                  value:
+                    id: 1
+                    created: '2019-08-24T14:15:22Z'
+                    category: Квартира
+                    address: 'Зеленоград, к. 130, кв. 14'
+                    description: Очень просторная двушка
+                    price: 9500000
+                    rooms: 2
+                    area: 54
+                    floor: 3
+                    seller_user: 1
+      operationId: get-api-v1-ad-id
+      description: Получить объявление
+    delete:
+      summary: ''
+      operationId: delete-api-v1-ad-id
+      responses:
+        '200':
+          description: OK
+      description: Удаление объявления
+    put:
+      summary: ''
+      operationId: put-api-v1-ad-id
+      responses:
+        '200':
+          description: OK
+      description: Обновление объявления
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                category:
+                  type: string
+                  minLength: 1
+                address:
+                  type: string
+                  minLength: 1
+                description:
+                  type: string
+                  minLength: 1
+                price:
+                  type: integer
+                rooms:
+                  type: integer
+                area:
+                  type: number
+                floor:
+                  type: integer
+              required:
+                - category
+                - address
+                - price
+                - area
+            examples:
+              Пример 1:
+                value:
+                  category: Квартира
+                  address: 'Зеленоград, к. 130, кв. 14'
+                  description: Очень просторная двушка
+                  price: 9500000
+                  rooms: 2
+                  area: 54
+                  floor: 3
+  /api/v1/user:
+    post:
+      summary: ''
+      operationId: post-api-v1-user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                required:
+                  - id
+              examples:
+                Пример 1:
+                  value:
+                    id: 1
+      description: Создание пользователя
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                email:
+                  type: string
+                  minLength: 1
+                name:
+                  type: string
+                  minLength: 1
+                password:
+                  type: string
+                  minLength: 1
+                roles:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    enum:
+                      - ROLE_USER
+                      - ROLE_ADMIN
+              required:
+                - email
+                - name
+                - password
+                - roles
+            examples:
+              Пример 1:
+                value:
+                  email: user@example.com
+                  name: Иван Иванов
+                  password: '123456'
+                  roles:
+                    - ROLE_USER
+                    - ROLE_ADMIN
+  /api/v1/deal:
+    post:
+      summary: Сделки
+      operationId: post-api-v1-deal
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                required:
+                  - id
+              examples:
+                Пример 1:
+                  value:
+                    id: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                ad_id:
+                  type: integer
+              required:
+                - ad_id
+            examples:
+              Пример 1:
+                value:
+                  ad_id: 2
+      description: Создание сделки
+  '/api/v1/deal/{id}':
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Конкретная сделка
+      tags: [ ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  state:
+                    type: string
+                    enum:
+                      - Новая
+                      - Договор подготовлен
+                      - Договор подписан
+                      - На регистрации
+                      - Ошибка регистрации
+                      - Регистрация завершена
+                  ad_id:
+                    type: integer
+                  buyer_id:
+                    type: integer
+                required:
+                  - id
+                  - state
+                  - ad_id
+                  - buyer_id
+              examples: { }
+      operationId: get-api-v1-deal-id
+      description: Получить сделку
+    post:
+      summary: ''
+      operationId: post-api-v1-deal-id
+      responses:
+        '200':
+          description: OK
+      description: Добавление события к сделке
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                state:
+                  type: string
+                  enum:
+                    - Новая
+                    - Договор подготовлен
+                    - Договор подписан
+                    - На регистрации
+                    - Ошибка регистрации
+                    - Регистрация завершена
+              required:
+                - state
+    delete:
+      summary: ''
+      operationId: delete-api-v1-deal-id
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      description: Пользователь системы
+      x-examples:
+        Пример 1:
+          id: 1
+          email: user@example.com
+          name: Иван Иванов
+          password: '123456'
+          roles:
+            - ROLE_USER
+      properties:
+        id:
+          type: integer
+          description: ''
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+          description: ФИО
+        password:
+          type: string
+          description: Хэш пароля
+        roles:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            enum:
+              - ROLE_USER
+              - ROLE_ADMIN
+      required:
+        - id
+        - email
+        - name
+        - password
+        - roles
+    Ad:
+      title: Ad
+      type: object
+      description: Объявление
+      x-examples:
+        Пример 1:
+          id: 1
+          created: '2019-08-24T14:15:22Z'
+          category: Квартира
+          address: 'Зеленоград, к. 130, кв. 14'
+          description: Очень просторная двушка
+          price: 9500000
+          rooms: 2
+          area: 54
+          floor: 3
+          seller_id: 1
+      properties:
+        id:
+          type: integer
+        created:
+          type: string
+          format: date-time
+        category:
+          type: string
+          description: Категория объявления
+          enum:
+            - Квартира
+            - Дом
+            - Участок
+        address:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+          description: 'Цена, руб.'
+        rooms:
+          type: integer
+          description: Кол-во комнат (для домов и квартир)
+        area:
+          type: number
+          description: 'Площадь, кв.м.'
+        floor:
+          type: integer
+          description: Этаж (для квартир)
+        seller_id:
+          type: integer
+      required:
+        - id
+        - created
+        - category
+        - address
+        - price
+        - area
+        - seller_id
+    Deal:
+      title: Deal
+      type: object
+      description: Сделка
+      properties:
+        id:
+          type: integer
+        state:
+          type: string
+          enum:
+            - Новая
+            - Договор подготовлен
+            - Договор подписан
+            - На регистрации
+            - Ошибка регистрации
+            - Регистрация завершена
+          description: Текущий статус сделки
+        ad_id:
+          type: integer
+          description: ID объявления
+        buyer_id:
+          type: integer
+          description: ID покупателя
+      required:
+        - id
+        - state
+        - ad_id
+        - buyer_id
+      x-examples:
+        Пример 1:
+          id: 1
+          state: Новая
+          ad_id: 2
+          buyer_id: 3
+    DealEvent:
+      title: DealEvent
+      type: object
+      x-examples:
+        Пример 1:
+          deal_id: 1
+          created: '2019-08-24T14:15:22Z'
+          state: Новая
+      properties:
+        deal_id:
+          type: integer
+          description: ID сделки
+        created:
+          type: string
+          format: date-time
+        state:
+          type: string
+          enum:
+            - Новая
+            - Договор подготовлен
+            - Договор подписан
+            - На регистрации
+            - Ошибка регистрации
+            - Регистрация завершена
+      required:
+        - created
+        - state
+        - deal_id
